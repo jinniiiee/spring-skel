@@ -1,0 +1,300 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "API 1.0"
+  },
+  "host" : "localhost:9443",
+  "basePath" : "/app",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/api/1.0/items" : {
+      "get" : {
+        "operationId" : "getItems",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Item"
+              }
+            },
+            "headers" : { }
+          }
+        }
+      },
+      "post" : {
+        "operationId" : "createItem",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ItemRequest"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/api/1.0/items/descriptions" : {
+      "get" : {
+        "operationId" : "getAllDescriptions",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Description"
+              }
+            },
+            "headers" : { }
+          }
+        }
+      }
+    },
+    "/api/1.0/items/descriptions/{id}" : {
+      "get" : {
+        "operationId" : "getDescriptionById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/OptionalDescription"
+            },
+            "headers" : { }
+          }
+        }
+      },
+      "put" : {
+        "operationId" : "updateDescription",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DescriptionRequest"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/api/1.0/items/{id}" : {
+      "get" : {
+        "operationId" : "getItemById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/OptionalItem"
+            },
+            "headers" : { }
+          }
+        }
+      },
+      "put" : {
+        "operationId" : "updateItem",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ItemRequest"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "delete" : {
+        "operationId" : "deleteItem",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/api/1.0/items/{itemId}/descriptions" : {
+      "post" : {
+        "operationId" : "addDescription",
+        "parameters" : [ {
+          "name" : "itemId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DescriptionRequest"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "OptionalItem" : {
+      "type" : "object",
+      "properties" : {
+        "empty" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "present" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "Item" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "state" : {
+          "type" : "string",
+          "enum" : [ "UNDEFINED", "VALID", "INVALID" ]
+        },
+        "descriptions" : {
+          "type" : "array",
+          "uniqueItems" : true,
+          "items" : {
+            "$ref" : "#/definitions/Description"
+          }
+        },
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "Description" : {
+      "type" : "object",
+      "properties" : {
+        "summary" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "LONG", "SHORT" ]
+        },
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "OptionalDescription" : {
+      "type" : "object",
+      "properties" : {
+        "empty" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "present" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "DescriptionRequest" : {
+      "type" : "object",
+      "properties" : {
+        "summary" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "model" : {
+          "$ref" : "#/definitions/Description"
+        }
+      }
+    },
+    "ItemRequest" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "descriptions" : {
+          "type" : "array",
+          "uniqueItems" : true,
+          "items" : {
+            "$ref" : "#/definitions/DescriptionRequest"
+          }
+        },
+        "state" : {
+          "type" : "string"
+        },
+        "model" : {
+          "$ref" : "#/definitions/Item"
+        }
+      }
+    }
+  }
+}
